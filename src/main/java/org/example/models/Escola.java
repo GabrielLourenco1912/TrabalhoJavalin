@@ -1,9 +1,6 @@
 package org.example.models;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 
 class Escola {
@@ -67,16 +64,11 @@ class Escola {
     }
 
     public boolean adicionarProfessor(Professor professor) {
-        for (Pessoa Professor : pessoas) {
-            if (Professor.getCPF().equals(professor.getCPF())) {
-                return false;
-            }
-        }
 
         try(Connection con = getConnection()) {
             System.out.println("Conexão estabelecida com sucesso!");
 
-            String sql = "INSERT INTO Professor_Escola(nome,CPF,email,ano_nascimento,salario,carga_horaria) VALUES (?,?,?,?,?,?)";
+            String sql = "INSERT INTO Professor_Escola(nome,cpf,email,ano_nascimento,salario,carga_horaria) VALUES (?,?,?,?,?,?)";
             PreparedStatement ps = con.prepareStatement(sql);
 
             ps.setString(1, professor.getNome());
@@ -106,7 +98,7 @@ class Escola {
         try(Connection con = getConnection()) {
             System.out.println("Conexão estabelecida com sucesso!");
 
-            String sql = "DELETE FROM Professor_Escola WHERE CPF = ?";
+            String sql = "DELETE FROM Professor_Escola WHERE cpf = ?";
             PreparedStatement ps = con.prepareStatement(sql);
 
             ps.setString(1, cpf);
@@ -127,171 +119,217 @@ class Escola {
     public void buscarAluno(String Nome) {
 
         try(Connection con = getConnection()) {
+            System.out.println("Conexão estabelecida com sucesso!");
+
+            String sql = "SELECT * FROM Aluno_Escola WHERE nome like ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, "%Nome%");
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                Aluno aluno = new Aluno("default", "default", "default", "default");
+                aluno.setNome(rs.getString("nome"));
+                aluno.setCPF(rs.getString("cpf"));
+                aluno.setEmail(rs.getString("email"));
+                aluno.setAnoNascimento(rs.getString("ano_nascimento"));
+
+                pessoas.clear();
+                pessoas.add(aluno);
+            }
+
 
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao conectar ao banco de dados", e);
         }
     }
-    public Pessoa buscarAlunoCPF(String CPF) {
-        for (Pessoa Aluno : pessoas) {
-            if (Aluno.getCPF().equalsIgnoreCase(CPF)) {
-                return Aluno;
+    public void buscarAlunoCPF(String cpf) {
+        try(Connection con = getConnection()) {
+            System.out.println("Conexão estabelecida com sucesso!");
+
+            String sql = "SELECT * FROM Aluno_Escola WHERE cpf = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, cpf);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                Aluno aluno = new Aluno("default", "default", "default", "default");
+                aluno.setNome(rs.getString("nome"));
+                aluno.setCPF(rs.getString("cpf"));
+                aluno.setEmail(rs.getString("email"));
+                aluno.setAnoNascimento(rs.getString("ano_nascimento"));
+
+                pessoas.clear();
+                pessoas.add(aluno);
             }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao conectar ao banco de dados", e);
         }
-        return null;
     }
-    public boolean removerAluno(String CPF) {
-        for (Pessoa Aluno : pessoas) {
-            if (Aluno.getCPF().equalsIgnoreCase(CPF)) {
-                pessoas.remove(Aluno);
+    public boolean removerAluno(String cpf) {
+        try(Connection con = getConnection()) {
+            System.out.println("Conexão estabelecida com sucesso!");
+
+            String sql = "DELETE FROM Aluno_Escola WHERE cpf = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ps.setString(1, cpf);
+
+            int rowsDeleted = ps.executeUpdate();
+            if (rowsDeleted > 0) {
+                System.out.println("Aluno excluído com sucesso!");
                 return true;
+            } else {
+                System.out.println("Nenhum aluno encontrado com o CPF fornecido.");
+                return false;
             }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao conectar ao banco de dados", e);
         }
-        return false;
     }
-    public String listarAlunos() {
-        if (pessoas.size() == 0) {
-            return null;
-        }
-        String listarAlunos = "";
-        for (Pessoa aluno : pessoas) {
-            if (aluno instanceof Aluno) {
-                listarAlunos += aluno + "\n";
+    public void listarAlunos() {
+        try(Connection con = getConnection()) {
+            System.out.println("Conexão estabelecida com sucesso!");
+
+            String sql = "SELECT * FROM Aluno_Escola";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Aluno aluno = new Aluno("default", "default", "default", "default");
+                aluno.setNome(rs.getString("nome"));
+                aluno.setCPF(rs.getString("cpf"));
+                aluno.setEmail(rs.getString("email"));
+                aluno.setAnoNascimento(rs.getString("ano_nascimento"));
+
+                pessoas.clear();
+                pessoas.add(aluno);
             }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao conectar ao banco de dados", e);
         }
-        return listarAlunos;
     }
-    public String listarProfessores() {
-        if (pessoas.size() == 0) {
-            return null;
-        }
-        String listarProfessores = "";
-        for (Pessoa professor : pessoas) {
-            if (professor instanceof Professor) {
-                listarProfessores += professor + "\n";
+    public void listarProfessores() {
+        try(Connection con = getConnection()) {
+            System.out.println("Conexão estabelecida com sucesso!");
+
+            String sql = "SELECT * FROM Professor_Escola";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Professor professor = new Professor("default", "default", "default", "default", "default", "default");
+                professor.setNome(rs.getString("nome"));
+                professor.setCPF(rs.getString("cpf"));
+                professor.setEmail(rs.getString("email"));
+                professor.setAnoNascimento(rs.getString("ano_nascimento"));
+                professor.setSalario(rs.getString("salario"));
+                professor.setCargaHoraria(rs.getString("carga_horario"));
+
+                pessoas.clear();
+                pessoas.add(professor);
             }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao conectar ao banco de dados", e);
         }
-        return listarProfessores;
     }
 
     public int contarAlunos() {
-        int contadorProfessores = 0;
-        for (Pessoa pessoa : pessoas) {
-            if (pessoa instanceof Professor) {
-                contadorProfessores++;
+        try (Connection con = getConnection()) {
+            System.out.println("Conexão estabelecida com sucesso!");
+            String sql = "SELECT COUNT(*) FROM Aluno_Escola";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
             }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao conectar ao banco de dados", e);
         }
-        return contadorProfessores;
+        return 0;
     }
-
     public int contarProfessores() {
-        int contadorAluno = 0;
-        for (Pessoa pessoa : pessoas) {
-            if (pessoa instanceof Aluno) {
-                contadorAluno++;
+        try (Connection con = getConnection()) {
+            System.out.println("Conexão estabelecida com sucesso!");
+            String sql = "SELECT COUNT(*) FROM Professor_Escola";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
             }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao conectar ao banco de dados", e);
         }
-        return contadorAluno;
+        return 0;
     }
 
-    public boolean adicionarDisciplina(Disciplina nova) {
-        for (Disciplina disciplina : disciplinas) {
-            if (disciplina.getCodigo().equalsIgnoreCase(nova.getCodigo())) {
-                return false;
+    public boolean adicionarDisciplina(Disciplina disciplina) {
+
+        try(Connection con = getConnection()) {
+
+            String sql = "INSERT INTO Disciplinas_Escola(nome,codigo,carga_horaria) VALUES (?,?,?)";
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ps.setString(1, disciplina.getNome());
+            ps.setString(2, disciplina.getCodigo());
+            ps.setInt(3, disciplina.getCargaHoraria());
+            int res = ps.executeUpdate();
+
+            if (res > 1) {
+                System.out.println("Registro adicionado com sucesso");
+            } else {
+                System.out.println("Deu ruim!");
             }
+
+            disciplinas.add(disciplina);
+            return true;
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao conectar ao banco de dados", e);
         }
-        disciplinas.add(nova);
-        return true;
-    }
-    public Disciplina buscarDisciplina(String Codigo) {
-        for (Disciplina disciplina : disciplinas) {
-            if (disciplina.getCodigo().equalsIgnoreCase(Codigo)) {
-                return disciplina;
-            }
-        }
-        return null;
-    }
-    public boolean matricularalunoDisciplina(String Codigo , String CPF) {
-        for (Disciplina disciplina : disciplinas) {
-            if (disciplina.getCodigo().equalsIgnoreCase(Codigo)) {
-                for (Pessoa aluno : pessoas) {
-                    if (aluno.getCPF().equalsIgnoreCase(CPF)) {
-                        disciplina.adicionarAluno(aluno);
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
     }
 
-    public boolean desmatricularalunoDisciplina(String Codigo , String CPF) {
-        for (Disciplina disciplina : disciplinas) {
-            if (disciplina.getCodigo().equalsIgnoreCase(Codigo)) {
-                for (Pessoa aluno : pessoas) {
-                    if (aluno.getCPF().equalsIgnoreCase(CPF)) {
-                        disciplina.removerAluno(CPF);
-                        return true;
-                    }
-                }
+    public void buscarDisciplina(String Codigo) {
+        try(Connection con = getConnection()) {
+            System.out.println("Conexão estabelecida com sucesso!");
+
+            String sql = "SELECT * FROM Disciplinas_Escola WHERE codigo = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, Codigo);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                Disciplina disciplina = new Disciplina("default", "default", 0);
+                disciplina.setNome(rs.getString("nome"));
+                disciplina.setCodigo(rs.getString("codigo"));
+                disciplina.setCargaHoraria(rs.getInt("carga_horaria"));
+
+                disciplinas.clear();
+                disciplinas.add(disciplina);
             }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao conectar ao banco de dados", e);
         }
-        return false;
     }
 
-    public String listarAlunosDisciplina(String Codigo) {
-        for (Disciplina disciplina : disciplinas) {
-            if (disciplina.getCodigo().equalsIgnoreCase(Codigo)) {
-                return disciplina.listarAlunos();
-            }
-        }
-        return null;
-    }
-    public boolean matricularprofessorDisciplina(String Codigo , String CPF) {
-        for (Disciplina disciplina : disciplinas) {
-            if (disciplina.getCodigo().equalsIgnoreCase(Codigo)) {
-                for (Pessoa professor : pessoas) {
-                    if (professor.getCPF().equalsIgnoreCase(CPF)) {
-                        disciplina.adicionarProfessor(professor);
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
-    public boolean desmatricularprofessorDisciplina(String Codigo , String CPF) {
-        for (Disciplina disciplina : disciplinas) {
-            if (disciplina.getCodigo().equalsIgnoreCase(Codigo)) {
-                for (Pessoa professor : pessoas) {
-                    if (professor.getCPF().equalsIgnoreCase(CPF)) {
-                        disciplina.removerProfessor(CPF);
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
+    public void listarDisciplinas() {
+        try(Connection con = getConnection()) {
+            System.out.println("Conexão estabelecida com sucesso!");
 
-    public String listarprofessorDisciplina(String Codigo) {
-        for (Disciplina disciplina : disciplinas) {
-            if (disciplina.getCodigo().equalsIgnoreCase(Codigo)) {
-                return disciplina.listarProfessores();
-            }
-        }
-        return null;
-    }
+            String sql = "SELECT * FROM Disciplinas_Escola";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Disciplina disciplina = new Disciplina("default", "default", 0);
+                disciplina.setNome(rs.getString("nome"));
+                disciplina.setCodigo(rs.getString("codigo"));
+                disciplina.setCargaHoraria(rs.getInt("carga_horaria"));
 
-    public String listarDisciplinas() {
-        if (disciplinas.isEmpty()) {
-            return null;
+                disciplinas.clear();
+                disciplinas.add(disciplina);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao conectar ao banco de dados", e);
         }
-        String listarDisciplinas = "";
-        for (Disciplina disciplina : disciplinas) {
-            listarDisciplinas += disciplina + "\n";
-        }
-        return listarDisciplinas;
     }
 
     public String toString() {

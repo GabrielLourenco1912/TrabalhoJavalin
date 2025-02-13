@@ -2,7 +2,7 @@ package org.example.models;
 
 public abstract class Pessoa {
     private String Nome;
-    private final String CPF;
+    private String CPF;
     private String Email;
     private String anoNascimento;
 
@@ -20,6 +20,9 @@ public abstract class Pessoa {
     }
     public String getCPF() {
         return CPF;
+    }
+    public void setCPF(String CPF) {
+        this.CPF = CPF;
     }
     public String getEmail() {
         return Email;

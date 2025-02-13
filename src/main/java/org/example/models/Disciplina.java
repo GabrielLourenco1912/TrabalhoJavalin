@@ -6,10 +6,10 @@ class Disciplina {
     private Pessoa[] pessoas;
     private int cargaHoraria;
 
-    public Disciplina(String codigo, String nome, int qAlunos , int cargaHoraria) {
+    public Disciplina(String codigo, String nome , int cargaHoraria) {
         this.codigo = codigo;
         this.nome = nome;
-        this.pessoas = new Pessoa[qAlunos + 1];
+        this.pessoas = new Pessoa[21];
         this.cargaHoraria = cargaHoraria;
     }
     public Pessoa[] getPessoas() {
