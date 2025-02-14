@@ -117,7 +117,6 @@ class Escola {
     }
 
     public void buscarAluno(String Nome) {
-
         try(Connection con = getConnection()) {
             System.out.println("Conexão estabelecida com sucesso!");
 
@@ -135,8 +134,6 @@ class Escola {
                 pessoas.clear();
                 pessoas.add(aluno);
             }
-
-
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao conectar ao banco de dados", e);
         }
@@ -187,6 +184,7 @@ class Escola {
     }
     public void listarAlunos() {
         try(Connection con = getConnection()) {
+            pessoas.clear();
             System.out.println("Conexão estabelecida com sucesso!");
 
             String sql = "SELECT * FROM Aluno_Escola";
@@ -199,7 +197,6 @@ class Escola {
                 aluno.setEmail(rs.getString("email"));
                 aluno.setAnoNascimento(rs.getString("ano_nascimento"));
 
-                pessoas.clear();
                 pessoas.add(aluno);
             }
 
@@ -209,6 +206,7 @@ class Escola {
     }
     public void listarProfessores() {
         try(Connection con = getConnection()) {
+            pessoas.clear();
             System.out.println("Conexão estabelecida com sucesso!");
 
             String sql = "SELECT * FROM Professor_Escola";
@@ -223,7 +221,7 @@ class Escola {
                 professor.setSalario(rs.getString("salario"));
                 professor.setCargaHoraria(rs.getString("carga_horario"));
 
-                pessoas.clear();
+
                 pessoas.add(professor);
             }
 
@@ -265,7 +263,7 @@ class Escola {
 
         try(Connection con = getConnection()) {
 
-            String sql = "INSERT INTO Disciplinas_Escola(nome,codigo,carga_horaria) VALUES (?,?,?)";
+            String sql = "INSERT INTO Disciplinas_Escola(nome,codigo_disciplina,carga_horaria) VALUES (?,?,?)";
             PreparedStatement ps = con.prepareStatement(sql);
 
             ps.setString(1, disciplina.getNome());
@@ -297,8 +295,8 @@ class Escola {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 Disciplina disciplina = new Disciplina("default", "default", 0);
-                disciplina.setNome(rs.getString("nome"));
-                disciplina.setCodigo(rs.getString("codigo"));
+                disciplina.setNome(rs.getString("nome_disciplina"));
+                disciplina.setCodigo(rs.getString("codigo_disciplina"));
                 disciplina.setCargaHoraria(rs.getInt("carga_horaria"));
 
                 disciplinas.clear();
@@ -312,6 +310,7 @@ class Escola {
 
     public void listarDisciplinas() {
         try(Connection con = getConnection()) {
+            disciplinas.clear();
             System.out.println("Conexão estabelecida com sucesso!");
 
             String sql = "SELECT * FROM Disciplinas_Escola";
@@ -319,11 +318,10 @@ class Escola {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Disciplina disciplina = new Disciplina("default", "default", 0);
-                disciplina.setNome(rs.getString("nome"));
-                disciplina.setCodigo(rs.getString("codigo"));
+                disciplina.setNome(rs.getString("nome_disciplina"));
+                disciplina.setCodigo(rs.getString("codigo_disciplina"));
                 disciplina.setCargaHoraria(rs.getInt("carga_horaria"));
 
-                disciplinas.clear();
                 disciplinas.add(disciplina);
             }
 
