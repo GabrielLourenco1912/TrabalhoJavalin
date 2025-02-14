@@ -5,11 +5,11 @@ import org.jetbrains.annotations.NotNull;
 import java.sql.*;
 import java.util.Arrays;
 
-class Disciplina {
+public class Disciplina {
     private String codigo;
     private String nome;
     private Pessoa[] pessoas;
-    private int cargaHoraria;
+    private String cargaHoraria;
 
     public Connection getConnection() {
         String jdbcUrl = "jdbc:mysql://wagnerweinert.com.br:3306/tads24_lourenco";
@@ -25,7 +25,7 @@ class Disciplina {
         }
     }
 
-    public Disciplina(String codigo, String nome , int cargaHoraria) {
+    public Disciplina(String codigo, String nome , String cargaHoraria) {
         this.codigo = codigo;
         this.nome = nome;
         this.pessoas = new Pessoa[21];
@@ -49,10 +49,10 @@ class Disciplina {
     public void setNome(String nome) {
         this.nome = nome;
     }
-    public int getCargaHoraria() {
+    public String getCargaHoraria() {
         return cargaHoraria;
     }
-    public void setCargaHoraria(int cargaHoraria) {
+    public void setCargaHoraria(String cargaHoraria) {
         this.cargaHoraria = cargaHoraria;
     }
     public boolean matricularAluno(@NotNull Aluno aluno, String codigo) {
@@ -102,9 +102,11 @@ class Disciplina {
         try(Connection con = getConnection()) {
             System.out.println("Conexão estabelecida com sucesso!");
 
-            String sql = "SELECT * FROM Matriculas_Aluno WHERE cpf = ? and codigo_disciplina = ?";
+            String sql = "SELECT a.nome, d.nome_disciplina FROM Aluno_Escola a, Disciplinas_Escola d, Matriculas_Aluno m " +
+                    "WHERE m.cpf = ? AND m.codigo_disciplina = ? AND m.cpf = a.cpf AND m.codigo_disciplina = d.codigo";
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setString(1, "%Nome%");
+            ps.setString(1, cpf);
+            ps.setString(2, codigo);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 Aluno aluno = new Aluno("default", "default", "default", "default");
@@ -153,7 +155,7 @@ class Disciplina {
             Arrays.fill(pessoas, null);
             System.out.println("Conexão estabelecida com sucesso!");
 
-            String sql = "SELECT * FROM Matriculas_Aluno WHERE codigo_disciplina = ?";
+            String sql = "SELECT p.nome, d.nome_disciplina FROM Aluno_Escola p, Disciplinas_Escola d, Matriculas_Aluno m WHERE m.codigo_disciplina = ? AND m.cpf = p.cpf AND m.codigo_disciplina = d.codigo_disciplina";
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, codigo);
             ResultSet rs = ps.executeQuery();
@@ -175,7 +177,7 @@ class Disciplina {
         }
     }
 
-    public boolean matricularProfessor(Professor prof) {
+    public boolean matricularProfessor(Professor prof, String codigo) {
         try (Connection con = getConnection()) {
             System.out.println("Verificando se o professor está cadastrado na escola...");
 
@@ -201,7 +203,7 @@ class Disciplina {
                 return false;
             }
 
-            String matriculaSql = "INSERT INTO Matriculas_Aluno (cpf, codigo_disciplina) VALUES (?, ?)";
+            String matriculaSql = "INSERT INTO Matriculas_Professor (cpf, codigo_disciplina) VALUES (?, ?)";
             PreparedStatement matriculaPs = con.prepareStatement(matriculaSql);
             matriculaPs.setString(1, prof.getCPF());
             matriculaPs.setString(2, codigo);
@@ -243,7 +245,7 @@ class Disciplina {
             Arrays.fill(pessoas, null);
             System.out.println("Conexão estabelecida com sucesso!");
 
-            String sql = "SELECT * FROM Matriculas_Professor WHERE codigo_disciplina = ? ";
+            String sql = "SELECT p.nome, d.nome_disciplina FROM Professor_Escola p, Disciplinas_Escola d, Matriculas_Professor m WHERE m.codigo_disciplina = ? AND m.cpf = p.cpf AND m.codigo_disciplina = d.codigo_disciplina";
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, codigo);
             ResultSet rs = ps.executeQuery();
@@ -254,11 +256,12 @@ class Disciplina {
                 professor.setEmail(rs.getString("email"));
                 professor.setAnoNascimento(rs.getString("ano_nascimento"));
                 professor.setSalario(rs.getString("salario"));
-                professor.setCargaHoraria(rs.getString("carga_horario"));
+                professor.setCargaHoraria(rs.getString("carga_horaria"));
 
                 for (int i = 0; i < pessoas.length; i++) {
                     if (pessoas[i] == null) {
                         pessoas[i] = professor;
+                        break;
                     }
                 }
             }

@@ -3,7 +3,7 @@ package org.example.models;
 import java.sql.*;
 import java.util.ArrayList;
 
-class Escola {
+public class Escola {
     private String Nome;
     private String Telefone;
     private ArrayList<Pessoa> pessoas;
@@ -16,6 +16,30 @@ class Escola {
         this.disciplinas = new ArrayList<>();
     }
 
+    public String getNome() {
+        return Nome;
+    }
+    public void setNome(String Nome) {
+        this.Nome = Nome;
+    }
+    public String getTelefone() {
+        return Telefone;
+    }
+    public void setTelefone(String Telefone) {
+        this.Telefone = Telefone;
+    }
+    public ArrayList<Pessoa> getPessoas() {
+        return pessoas;
+    }
+    public void setPessoas(ArrayList<Pessoa> pessoas) {
+        this.pessoas = pessoas;
+    }
+    public ArrayList<Disciplina> getDisciplinas() {
+        return disciplinas;
+    }
+    public void setDisciplinas(ArrayList<Disciplina> disciplinas) {
+        this.disciplinas = disciplinas;
+    }
     public Connection getConnection() {
         String jdbcUrl = "jdbc:mysql://wagnerweinert.com.br:3306/tads24_lourenco";
         String username = "tads24_lourenco";
@@ -49,7 +73,7 @@ class Escola {
             ps.setString(4, aluno.getAnoNascimento());
             int res = ps.executeUpdate();
 
-            if (res > 1) {
+            if (res > 0) {
                 System.out.println("Registro adicionado com sucesso");
             } else {
                 System.out.println("Deu ruim!");
@@ -79,7 +103,7 @@ class Escola {
             ps.setString(6, professor.getCargaHoraria());
             int res = ps.executeUpdate();
 
-            if (res > 1) {
+            if (res > 0) {
                 System.out.println("Registro adicionado com sucesso");
             } else {
                 System.out.println("Deu ruim!");
@@ -122,7 +146,7 @@ class Escola {
 
             String sql = "SELECT * FROM Aluno_Escola WHERE nome like ?";
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setString(1, "%Nome%");
+            ps.setString(1, "%" + Nome + "%");
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 Aluno aluno = new Aluno("default", "default", "default", "default");
@@ -268,10 +292,10 @@ class Escola {
 
             ps.setString(1, disciplina.getNome());
             ps.setString(2, disciplina.getCodigo());
-            ps.setInt(3, disciplina.getCargaHoraria());
+            ps.setString(3, disciplina.getCargaHoraria());
             int res = ps.executeUpdate();
 
-            if (res > 1) {
+            if (res > 0) {
                 System.out.println("Registro adicionado com sucesso");
             } else {
                 System.out.println("Deu ruim!");
@@ -289,15 +313,15 @@ class Escola {
         try(Connection con = getConnection()) {
             System.out.println("Conexão estabelecida com sucesso!");
 
-            String sql = "SELECT * FROM Disciplinas_Escola WHERE codigo = ?";
+            String sql = "SELECT * FROM Disciplinas_Escola WHERE codigo_disciplina = ?";
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, Codigo);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                Disciplina disciplina = new Disciplina("default", "default", 0);
+                Disciplina disciplina = new Disciplina("default", "default", "default");
                 disciplina.setNome(rs.getString("nome_disciplina"));
                 disciplina.setCodigo(rs.getString("codigo_disciplina"));
-                disciplina.setCargaHoraria(rs.getInt("carga_horaria"));
+                disciplina.setCargaHoraria(rs.getString("carga_horaria"));
 
                 disciplinas.clear();
                 disciplinas.add(disciplina);
@@ -317,10 +341,10 @@ class Escola {
             PreparedStatement ps = con.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Disciplina disciplina = new Disciplina("default", "default", 0);
+                Disciplina disciplina = new Disciplina("default", "default", "default");
                 disciplina.setNome(rs.getString("nome_disciplina"));
                 disciplina.setCodigo(rs.getString("codigo_disciplina"));
-                disciplina.setCargaHoraria(rs.getInt("carga_horaria"));
+                disciplina.setCargaHoraria(rs.getString("carga_horaria"));
 
                 disciplinas.add(disciplina);
             }

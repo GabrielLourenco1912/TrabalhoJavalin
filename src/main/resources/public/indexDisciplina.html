@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escola - Gerenciamento de Disciplinas</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <h1>Bem-vindo ao Sistema de Gerenciamento da Escola</h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Página Inicial</a></li>
+                    <li><a href="indexEscola.html">Gerenciamento da Escola</a></li>
+                    <li><a href="indexDisciplina.html">Gerenciamento de Disciplinas</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <h1>Gerenciamento de Disciplinas</h1>
+
+    <h2>Matricular Aluno</h2>
+    <form action="/matricularAluno" method="post">
+        <label for="codigoDisciplinaAluno">Código da Disciplina:</label>
+        <input type="text" id="codigoDisciplinaAluno" name="codigo_disciplina">
+        <label for="nomeAluno">Nome:</label>
+        <input type="text" id="nomeAluno" name="nome">
+        <label for="cpfAluno">CPF:</label>
+        <input type="text" id="cpfAluno" name="cpf">
+        <label for="emailAluno">Email:</label>
+        <input type="email" id="emailAluno" name="email">
+        <label for="anoNascimentoAluno">Ano de Nascimento:</label>
+        <input type="text" id="anoNascimentoAluno" name="anoNascimento">
+        <button type="submit">Matricular Aluno</button>
+    </form>
+
+    <h2>Procurar Aluno na Disciplina</h2>
+    <form action="/procurarAlunoDisciplina" method="post">
+        <label for="codigoDisciplinaProcurarAluno">Código da Disciplina:</label>
+        <input type="text" id="codigoDisciplinaProcurarAluno" name="codigo_disciplina">
+        <label for="cpfProcurarAluno">CPF do Aluno:</label>
+        <input type="text" id="cpfProcurarAluno" name="cpf">
+        <button type="submit">Procurar Aluno</button>
+    </form>
+
+    <h2>Desmatricular Aluno</h2>
+    <form action="/desmatricularAluno" method="post">
+        <label for="codigoDisciplinaDesmatricularAluno">Código da Disciplina:</label>
+        <input type="text" id="codigoDisciplinaDesmatricularAluno" name="codigo_disciplina">
+        <label for="cpfDesmatricularAluno">CPF:</label>
+        <input type="text" id="cpfDesmatricularAluno" name="cpf">
+        <button type="submit">Desmatricular Aluno</button>
+    </form>
+
+    <h2>Listar Alunos da Disciplina</h2>
+    <form action="/listarAlunosDisciplina" method="post">
+        <label for="codigoDisciplinaListarAlunos">Código da Disciplina:</label>
+        <input type="text" id="codigoDisciplinaListarAlunos" name="codigo_disciplina">
+        <button type="submit">Listar Alunos</button>
+    </form>
+
+    <h2>Matricular Professor</h2>
+    <form action="/matricularProfessor" method="post">
+        <label for="codigoDisciplinaProfessor">Código da Disciplina:</label>
+        <input type="text" id="codigoDisciplinaProfessor" name="codigo_disciplina">
+        <label for="nomeProfessor">Nome:</label>
+        <input type="text" id="nomeProfessor" name="nome">
+        <label for="cpfProfessor">CPF:</label>
+        <input type="text" id="cpfProfessor" name="cpf">
+        <label for="emailProfessor">Email:</label>
+        <input type="email" id="emailProfessor" name="email">
+        <label for="anoNascimentoProfessor">Ano de Nascimento:</label>
+        <input type="text" id="anoNascimentoProfessor" name="anoNascimento">
+        <label for="salarioProfessor">Salário:</label>
+        <input type="text" id="salarioProfessor" name="salario">
+        <label for="cargaHorariaProfessor">Carga Horária:</label>
+        <input type="text" id="cargaHorariaProfessor" name="cargaHoraria">
+        <button type="submit">Matricular Professor</button>
+    </form>
+
+    <h2>Desmatricular Professor</h2>
+    <form action="/desmatricularProfessor" method="post">
+        <label for="codigoDisciplinaDesmatricularProfessor">Código da Disciplina:</label>
+        <input type="text" id="codigoDisciplinaDesmatricularProfessor" name="codigo_disciplina">
+        <label for="cpfDesmatricularProfessor">CPF:</label>
+        <input type="text" id="cpfDesmatricularProfessor" name="cpf">
+        <button type="submit">Desmatricular Professor</button>
+    </form>
+
+    <h2>Listar Professores da Disciplina</h2>
+    <form action="/listarProfessoresDisciplina" method="post">
+        <label for="codigoDisciplinaListarProfessores">Código da Disciplina:</label>
+        <input type="text" id="codigoDisciplinaListarProfessores" name="codigo_disciplina">
+        <button type="submit">Listar Professores</button>
+    </form>
+</body>
+</html>

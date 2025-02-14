@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escola - Gerenciamento</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <h1>Bem-vindo ao Sistema de Gerenciamento da Escola</h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Página Inicial</a></li>
+                    <li><a href="indexEscola.html">Gerenciamento da Escola</a></li>
+                    <li><a href="indexDisciplina.html">Gerenciamento de Disciplinas</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <h1>Gerenciamento da Escola</h1>
+
+    <h2>Adicionar Aluno</h2>
+    <form action="/adicionarAluno" method="post">
+        <label for="nomeAluno">Nome:</label>
+        <input type="text" id="nomeAluno" name="nome">
+        <label for="cpfAluno">CPF:</label>
+        <input type="text" id="cpfAluno" name="cpf">
+        <label for="emailAluno">Email:</label>
+        <input type="email" id="emailAluno" name="email">
+        <label for="anoNascimentoAluno">Ano de Nascimento:</label>
+        <input type="text" id="anoNascimentoAluno" name="anoNascimento">
+        <button type="submit">Adicionar Aluno</button>
+    </form>
+
+    <h2>Adicionar Professor</h2>
+    <form action="/adicionarProfessor" method="post">
+        <label for="nomeProfessor">Nome:</label>
+        <input type="text" id="nomeProfessor" name="nome">
+        <label for="cpfProfessor">CPF:</label>
+        <input type="text" id="cpfProfessor" name="cpf">
+        <label for="emailProfessor">Email:</label>
+        <input type="email" id="emailProfessor" name="email">
+        <label for="anoNascimentoProfessor">Ano de Nascimento:</label>
+        <input type="text" id="anoNascimentoProfessor" name="anoNascimento">
+        <label for="salarioProfessor">Salário:</label>
+        <input type="text" id="salarioProfessor" name="salario">
+        <label for="cargaHorariaProfessor">Carga Horária:</label>
+        <input type="text" id="cargaHorariaProfessor" name="cargaHoraria">
+        <button type="submit">Adicionar Professor</button>
+    </form>
+
+    <h2>Remover Aluno</h2>
+    <form action="/removerAluno" method="post">
+        <label for="cpfRemoverAluno">CPF:</label>
+        <input type="text" id="cpfRemoverAluno" name="cpf">
+        <button type="submit">Remover Aluno</button>
+    </form>
+
+    <h2>Remover Professor</h2>
+    <form action="/removerProfessor" method="post">
+        <label for="cpfRemoverProfessor">CPF:</label>
+        <input type="text" id="cpfRemoverProfessor" name="cpf">
+        <button type="submit">Remover Professor</button>
+    </form>
+
+    <h2>Buscar Aluno por Nome</h2>
+    <form action="/buscarAluno" method="post">
+        <label for="nomeBuscarAluno">Nome:</label>
+        <input type="text" id="nomeBuscarAluno" name="nome">
+        <button type="submit">Buscar Aluno</button>
+    </form>
+
+    <h2>Buscar Aluno por CPF</h2>
+    <form action="/buscarAlunoCPF" method="post">
+        <label for="cpfBuscarAluno">CPF:</label>
+        <input type="text" id="cpfBuscarAluno" name="cpf">
+        <button type="submit">Buscar Aluno</button>
+    </form>
+
+    <h2>Listar Alunos</h2>
+    <form action="/listarAlunos" method="post">
+        <button type="submit">Listar Alunos</button>
+    </form>
+
+    <h2>Listar Professores</h2>
+    <form action="/listarProfessores" method="post">
+        <button type="submit">Listar Professores</button>
+    </form>
+
+    <h2>Adicionar Disciplina</h2>
+    <form action="/adicionarDisciplina" method="post">
+        <label for="codigoDisciplina">Código:</label>
+        <input type="text" id="codigoDisciplina" name="codigo">
+        <label for="nomeDisciplina">Nome:</label>
+        <input type="text" id="nomeDisciplina" name="nome">
+        <label for="cargaHorariaDisciplina">Carga Horária:</label>
+        <input type="text" id="cargaHorariaDisciplina" name="cargaHoraria">
+        <button type="submit">Adicionar Disciplina</button>
+    </form>
+
+    <h2>Contar Alunos</h2>
+    <form action="/contarAlunos" method="post">
+        <button type="submit">Contar Alunos</button>
+    </form>
+
+    <h2>Contar Professores</h2>
+    <form action="/contarProfessores" method="post">
+        <button type="submit">Contar Professores</button>
+    </form>
+</body>
+</html>

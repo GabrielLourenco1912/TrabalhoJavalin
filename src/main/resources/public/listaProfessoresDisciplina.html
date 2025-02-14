@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Professores da Disciplina</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header>
+    <div class="header-container">
+        <h1>Lista de Professores da Disciplina</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Página Inicial</a></li>
+                <li><a href="indexEscola.html">Gerenciamento da Escola</a></li>
+                <li><a href="indexDisciplina.html">Gerenciamento de Disciplinas</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<div class="lista">
+    <#if mensagem??>
+    <div class="mensagem">
+        ${mensagem}
+    </div>
+</#if>
+<#if professores??>
+<ul>
+    <#list professores as professor>
+    <li>${professor.nome}</li>
+</#list>
+</ul>
+</#if>
+</div>
+
+</body>
+</html>
